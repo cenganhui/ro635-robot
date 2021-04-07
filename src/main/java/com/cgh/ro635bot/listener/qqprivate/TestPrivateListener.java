@@ -27,8 +27,8 @@ public class TestPrivateListener {
         this.messageContentBuilderFactory = messageContentBuilderFactory;
     }
 
-    @Autowired
-    private TestDao testDao;
+//    @Autowired
+//    private TestDao testDao;
 
     /**
      * 复读测试
@@ -36,12 +36,12 @@ public class TestPrivateListener {
      * @param privateMsg
      * @param sender
      */
-    @OnPrivate
-    public void repeatMsg(PrivateMsg privateMsg, MsgSender sender) {
-        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
-        Test test = testDao.getTestById(1);
-        MessageContent msg = builder.text(test.getWord()).build();
-        sender.SENDER.sendPrivateMsg(privateMsg, msg);
-    }
+//    @OnPrivate
+//    public void repeatMsg(PrivateMsg privateMsg, MsgSender sender) {
+//        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+//        Test test = testDao.getTestById(1);
+//        MessageContent msg = builder.text(test.getWord()).build();
+//        sender.SENDER.sendPrivateMsg(privateMsg, msg);
+//    }
 
 }
