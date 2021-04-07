@@ -22,7 +22,8 @@ public abstract class Constants {
     public static final String QUERY_PRODUCE_FAIL = "抱歉指挥官，我没能找到。";
 
     public static final String RANDOM_PICTURE_WORDS1 = "虽然是一件十分讨厌的事，但还是请您好好享受。\n";
-    public static final String RANDOM_PICTURE_FILEPATH_PREFIX = "D:\\IdeaProjects\\TestPic\\";
+//    public static final String RANDOM_PICTURE_FILEPATH_PREFIX = "D:\\IdeaProjects\\TestPic\\";
+    public static final String RANDOM_PICTURE_FILEPATH_PREFIX = "/home/ro635-bot-picture/random-picture/";
     public static final String RANDOM_PICTURE_FILEPATH_SUFFIX = ".jpg";
 
     public static final String HELP_TEXT = "# 基础指令\n\n" +
