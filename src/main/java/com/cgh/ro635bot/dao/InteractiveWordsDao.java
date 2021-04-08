@@ -15,6 +15,6 @@ public interface InteractiveWordsDao {
      *
      * @return 台词
      */
-    public InteractiveWords getRandomInteractiveWords();
+    InteractiveWords getRandomInteractiveWords();
 
 }

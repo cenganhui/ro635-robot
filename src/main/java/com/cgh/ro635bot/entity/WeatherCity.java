@@ -3,13 +3,13 @@ package com.cgh.ro635bot.entity;
 import lombok.Data;
 
 /**
- * 妖精建造
+ * 城市信息
  *
  * @author Akuma
- * @date 2021/4/6 16:00
+ * @date 2021/4/8 18:39
  */
 @Data
-public class FairyProduce {
+public class WeatherCity {
 
     /**
      * id
@@ -17,13 +17,13 @@ public class FairyProduce {
     private Integer id;
 
     /**
-     * 建造时间
-     */
-    private String time;
-
-    /**
-     * 妖精名称
+     * 城市名称
      */
     private String name;
+
+    /**
+     * 城市code
+     */
+    private String code;
 
 }

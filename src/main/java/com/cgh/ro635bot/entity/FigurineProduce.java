@@ -11,22 +11,34 @@ import lombok.Data;
 @Data
 public class FigurineProduce {
 
-    // id
+    /**
+     * id
+     */
     private Integer id;
 
-    // 建造时间
+    /**
+     * 建造时间
+     */
     private String time;
 
-    // 人形名称
+    /**
+     * 人形名称
+     */
     private String name;
 
-    // 星级
+    /**
+     * 星级
+     */
     private Integer level;
 
-    // 类型
+    /**
+     * 类型
+     */
     private String type;
 
-    // 是否重建
+    /**
+     * 是否重建
+     */
     private Integer heavy;
 
 }

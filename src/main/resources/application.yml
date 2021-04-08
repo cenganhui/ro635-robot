@@ -17,3 +17,12 @@ spring:
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.cgh.ro635bot.entity
+
+# API KEY
+weather:
+  key:
+
+# 日志
+logging:
+  level:
+    com.cgh.ro635bot.listener.qqgroup: DEBUG

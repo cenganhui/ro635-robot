@@ -8,6 +8,8 @@ package com.cgh.ro635bot;
  */
 public abstract class Constants {
 
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     public static final String CAL_RANDOM_WORDS1 = "？正在为您计算......概率为";
     public static final String CAL_RANDOM_WORDS2 = "%，有点低呢。";
     public static final String CAL_RANDOM_WORDS3 = "%，不是很高呢。";
@@ -24,7 +26,8 @@ public abstract class Constants {
     public static final String RANDOM_PICTURE_WORDS1 = "虽然是一件十分讨厌的事，但还是请您好好享受。\n";
 //    public static final String RANDOM_PICTURE_FILEPATH_PREFIX = "D:\\IdeaProjects\\TestPic\\";
     public static final String RANDOM_PICTURE_FILEPATH_PREFIX = "/home/ro635-bot-picture/random-picture/";
-    public static final String RANDOM_PICTURE_FILEPATH_SUFFIX = ".jpg";
+
+    public static final String WEATHER_CITY_NAME_QUERY_FAIL = "抱歉指挥官，城市名称可能有些问题。";
 
     public static final String HELP_TEXT = "# 基础指令\n\n" +
             "# 早上好\n" +
@@ -40,6 +43,13 @@ public abstract class Constants {
             "# 查询妖精建造\n" +
             "@RO qfa x:xx\n" +
             "# 图图\n" +
-            "@RO pic";
+            "@RO pic\n" +
+            "# 天气预报\n" +
+            "@RO wea 城市名称";
+
+    /**
+     * 高德地图天气预报请求url
+     */
+    public static final String WEATHER_SERVICE_URL = "https://restapi.amap.com/v3/weather/weatherInfo?city=";
 
 }

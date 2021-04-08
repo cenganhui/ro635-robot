@@ -3,6 +3,7 @@ package com.cgh.ro635bot.listener.qqgroup;
 import com.cgh.ro635bot.Constants;
 import com.cgh.ro635bot.dao.*;
 import com.cgh.ro635bot.entity.*;
+import com.cgh.ro635bot.utils.WeatherUtil;
 import love.forte.simbot.annotation.Filter;
 import love.forte.simbot.annotation.ListenBreak;
 import love.forte.simbot.annotation.OnGroup;
@@ -14,9 +15,13 @@ import love.forte.simbot.api.message.events.GroupMsg;
 import love.forte.simbot.api.sender.MsgSender;
 import love.forte.simbot.constant.PriorityConstant;
 import love.forte.simbot.filter.MatchType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -30,7 +35,9 @@ import java.util.Random;
 @Service
 public class GroupListener {
 
-    // 消息构建工厂
+    /**
+     * 消息构造工厂
+     */
     private final MessageContentBuilderFactory messageContentBuilderFactory;
 
     @Autowired
@@ -52,6 +59,22 @@ public class GroupListener {
 
     @Autowired
     private RandomPictureDao randomPictureDao;
+
+    @Autowired
+    private WeatherCityDao weatherCityDao;
+
+    @Autowired
+    private WeatherUtil weatherUtil;
+
+    /**
+     * 日志
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(GroupListener.class);
+
+    /**
+     * 日志时间格式
+     */
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Constants.DATE_FORMAT);
 
 
     /**
@@ -82,6 +105,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(newStr).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("计算概率success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -98,6 +122,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(interactiveWords.getWords()).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("日常互动success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -139,6 +164,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(stringBuilder.toString()).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("人形建造查询success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -178,6 +204,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(stringBuilder.toString()).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("装备建造查询success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -212,6 +239,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(stringBuilder.toString()).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("妖精建造查询success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -225,10 +253,52 @@ public class GroupListener {
     @Filter(atBot = true, value = "pic", matchType = MatchType.EQUALS, trim = true)
     public void randomPicture(GroupMsg groupMsg, MsgSender msgSender) {
         RandomPicture randomPicture = randomPictureDao.getRandomPicture();
-        String path = Constants.RANDOM_PICTURE_FILEPATH_PREFIX + randomPicture.getPid() + Constants.RANDOM_PICTURE_FILEPATH_SUFFIX;
+        String path = Constants.RANDOM_PICTURE_FILEPATH_PREFIX + randomPicture.getPid();
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(Constants.RANDOM_PICTURE_WORDS1).image(path).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("图图success，时间：{}", DATE_FORMAT.format(new Date()));
+    }
+
+    /**
+     * 天气查询
+     */
+    @Priority(PriorityConstant.FIRST)
+    @OnGroup
+    @Filter(atBot = true, value = "wea", matchType = MatchType.STARTS_WITH, trim = true)
+    public void sendWeatherInfo(GroupMsg groupMsg, MsgSender msgSender) {
+        String query = getQuery(Objects.requireNonNull(groupMsg.getText()));
+        WeatherCity weatherCity = weatherCityDao.findWeatherCityByName(query);
+        if (weatherCity != null) {
+            // 查询到该城市的code
+            String weatherInfoJson = weatherUtil.getWeather(weatherCity.getCode());
+            WeatherInfo weatherInfo = weatherUtil.getWeatherInfo(weatherInfoJson);
+            if (weatherInfo != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("指挥官，这是")
+                        .append(weatherInfo.getCity())
+                        .append("的天气预报。\n\n")
+                        .append(weatherInfo.getReportTime())
+                        .append("\n\n");
+                for (Cast cast : weatherInfo.getCasts()) {
+                    stringBuilder.append(cast.getDate()).append("\n")
+                            .append(cast.getDayWeather()).append("\n")
+                            .append(cast.getNightWeather()).append("\n")
+                            .append(cast.getDayTemp()).append("\n")
+                            .append(cast.getNightTemp()).append("\n");
+                }
+                MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+                MessageContent msg = builder.text(stringBuilder.toString()).build();
+                msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+                LOG.info("城市查询success，天气查询success，时间：{}", DATE_FORMAT.format(new Date()));
+            }
+        } else {
+            // 没有查询到该城市的code
+            MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+            MessageContent msg = builder.text(Constants.WEATHER_CITY_NAME_QUERY_FAIL).build();
+            msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+            LOG.info("无匹配城市，时间：{}", DATE_FORMAT.format(new Date()));
+        }
     }
 
     /**
@@ -244,6 +314,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(Constants.GOOD_MORNING).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("早上好success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -259,6 +330,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(Constants.EXPRESSION).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("告白success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -274,6 +346,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(Constants.HELP_TEXT).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("获取帮助信息（基础指令）success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**

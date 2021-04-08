@@ -19,6 +19,6 @@ public interface FigurineProduceDao {
      * @param time 时间
      * @return 人形
      */
-    public List<FigurineProduce> findAllFigurineProduceByTime(@Param("time") String time);
+    List<FigurineProduce> findAllFigurineProduceByTime(@Param("time") String time);
 
 }

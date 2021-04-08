@@ -19,6 +19,6 @@ public interface EquipmentProduceDao {
      * @param time 时间
      * @return 装备
      */
-    public List<EquipmentProduce> findAllEquipmentProduceByTime(@Param("time") String time);
+    List<EquipmentProduce> findAllEquipmentProduceByTime(@Param("time") String time);
 
 }

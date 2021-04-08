@@ -11,10 +11,14 @@ import lombok.Data;
 @Data
 public class InteractiveWords {
 
-    // id
+    /**
+     * id
+     */
     private Integer id;
 
-    // 台词
+    /**
+     * 台词
+     */
     private String words;
 
 }

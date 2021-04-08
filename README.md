@@ -5,7 +5,9 @@
 - 互动
 - 人形、装备、妖精的建造查询
 - 图图
+- 天气预报
 
 ## 资料
 - simple-robot：https://github.com/ForteScarlet/simpler-robot
 - simple-robot文档：https://www.yuque.com/simpler-robot/simpler-robot-doc
+- 高德开放平台：https://lbs.amap.com/api/webservice/guide/api/weatherinfo

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TestDao {
 
-    public Test getTestById(@Param("id") Integer id);
+    Test getTestById(@Param("id") Integer id);
 
 }

@@ -11,10 +11,14 @@ import lombok.Data;
 @Data
 public class RandomPicture {
 
-    // id
+    /**
+     * id
+     */
     private Integer id;
 
-    // pivix id
+    /**
+     * pivix id
+     */
     private String pid;
 
 }

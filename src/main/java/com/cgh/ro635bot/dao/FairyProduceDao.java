@@ -19,6 +19,6 @@ public interface FairyProduceDao {
      * @param time 时间
      * @return 妖精
      */
-    public List<FairyProduce> findAllFairyProduceByTime(@Param("time") String time);
+    List<FairyProduce> findAllFairyProduceByTime(@Param("time") String time);
 
 }

@@ -9,19 +9,29 @@ import lombok.Data;
 @Data
 public class EquipmentProduce {
 
-    // id
+    /**
+     * id
+     */
     private Integer id;
 
-    // 建造时间
+    /**
+     * 建造时间
+     */
     private String time;
 
-    // 装备名称
+    /**
+     * 装备名称
+     */
     private String name;
 
-    // 等级
+    /**
+     * 等级
+     */
     private Integer level;
 
-    // 类型
+    /**
+     * 类型
+     */
     private String type;
 
 }

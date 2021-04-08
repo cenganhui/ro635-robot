@@ -15,6 +15,6 @@ public interface RandomPictureDao {
      *
      * @return 图片
      */
-    public RandomPicture getRandomPicture();
+    RandomPicture getRandomPicture();
 
 }
