@@ -6,6 +6,7 @@
 - 人形、装备、妖精的建造查询
 - 图图
 - 天气预报
+- 欢迎新成员
 
 ## 资料
 - simple-robot：https://github.com/ForteScarlet/simpler-robot

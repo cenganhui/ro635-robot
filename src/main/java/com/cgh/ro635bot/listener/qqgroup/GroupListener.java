@@ -4,13 +4,13 @@ import com.cgh.ro635bot.Constants;
 import com.cgh.ro635bot.dao.*;
 import com.cgh.ro635bot.entity.*;
 import com.cgh.ro635bot.utils.WeatherUtil;
-import love.forte.simbot.annotation.Filter;
-import love.forte.simbot.annotation.ListenBreak;
-import love.forte.simbot.annotation.OnGroup;
-import love.forte.simbot.annotation.Priority;
+import love.forte.simbot.annotation.*;
 import love.forte.simbot.api.message.MessageContent;
 import love.forte.simbot.api.message.MessageContentBuilder;
 import love.forte.simbot.api.message.MessageContentBuilderFactory;
+import love.forte.simbot.api.message.containers.AccountInfo;
+import love.forte.simbot.api.message.containers.GroupInfo;
+import love.forte.simbot.api.message.events.GroupMemberIncrease;
 import love.forte.simbot.api.message.events.GroupMsg;
 import love.forte.simbot.api.sender.MsgSender;
 import love.forte.simbot.constant.PriorityConstant;
@@ -299,6 +299,26 @@ public class GroupListener {
             msgSender.SENDER.sendGroupMsg(groupMsg, msg);
             LOG.info("无匹配城市，时间：{}", DATE_FORMAT.format(new Date()));
         }
+    }
+
+    /**
+     * 欢迎新成员
+     *
+     * @param groupMemberIncrease
+     * @param msgSender
+     */
+    @OnGroupMemberIncrease
+    public void welcome(GroupMemberIncrease groupMemberIncrease, MsgSender msgSender) {
+        // 获取新成员信息
+        AccountInfo accountInfo = groupMemberIncrease.getAccountInfo();
+        String accountCode = accountInfo.getAccountCode();
+        // 获取群信息
+        GroupInfo groupInfo = groupMemberIncrease.getGroupInfo();
+        String groupCode = groupInfo.getGroupCode();
+        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+        MessageContent msg = builder.at(accountCode).text(Constants.WELCOME_NEW_MEMBER).build();
+        msgSender.SENDER.sendGroupMsg(groupCode, msg);
+        LOG.info("欢迎新成员success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
