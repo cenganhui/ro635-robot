@@ -4,7 +4,10 @@ import com.cgh.ro635bot.Constants;
 import com.cgh.ro635bot.dao.*;
 import com.cgh.ro635bot.entity.*;
 import com.cgh.ro635bot.utils.WeatherUtil;
-import love.forte.simbot.annotation.*;
+import love.forte.simbot.annotation.Filter;
+import love.forte.simbot.annotation.OnGroup;
+import love.forte.simbot.annotation.OnGroupMemberIncrease;
+import love.forte.simbot.annotation.Priority;
 import love.forte.simbot.api.message.MessageContent;
 import love.forte.simbot.api.message.MessageContentBuilder;
 import love.forte.simbot.api.message.MessageContentBuilderFactory;
@@ -86,7 +89,6 @@ public class GroupListener {
     @Priority(PriorityConstant.FIRST)
     @OnGroup
     @Filter(atBot = true, value = "rd", matchType = MatchType.STARTS_WITH, trim = true)
-    @ListenBreak
     public void calRandom(GroupMsg groupMsg, MsgSender msgSender) {
         Random random = new Random();
         int rand = random.nextInt(100) + 1;

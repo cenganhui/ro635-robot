@@ -54,4 +54,9 @@ public abstract class Constants {
      */
     public static final String WEATHER_SERVICE_URL = "https://restapi.amap.com/v3/weather/weatherInfo?city=";
 
+    public static final String CAT_TYPE_IMAGE = "image";
+    public static final String NEKO_IMAGE_URL = "url";
+    public static final String UPDATE_INFO_WORDS = "指挥官，这是格琳娜小姐要我传达给您的信息，请留意。";
+    public static final String GROUP_SEND_FAILURE = "群发失败，请重试。";
+
 }

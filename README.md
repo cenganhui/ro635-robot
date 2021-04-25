@@ -7,6 +7,7 @@
 - 图图
 - 天气预报
 - 欢迎新成员
+- 私聊群发更新信息
 
 ## 资料
 - simple-robot：https://github.com/ForteScarlet/simpler-robot
