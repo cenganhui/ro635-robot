@@ -68,9 +68,10 @@ public class PrivateListener {
             if (!StringUtils.isNullOrEmpty(imageUrl)) {
                 // 获取QQ群列表
                 GroupList groupList = msgSender.GETTER.getGroupList();
+                // 构建消息内容
+                MessageContent msg = builder.text(Constants.UPDATE_INFO_WORDS).imageUrl(imageUrl).build();
                 // 遍历群发
                 for (SimpleGroupInfo groupInfo : groupList) {
-                    MessageContent msg = builder.text(Constants.UPDATE_INFO_WORDS).imageUrl(imageUrl).build();
 //                    System.out.println(groupInfo.getGroupCode());
                     msgSender.SENDER.sendGroupMsg(groupInfo.getGroupCode(), msg);
                 }
