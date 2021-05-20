@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
  */
 public class PrintFileName {
 
-    public static final String PATH = "D:\\IdeaProjects\\TestPic\\2021-4-19";
+    public static final String PATH = "D:\\IdeaProjects\\TestPic\\2021-5-1";
 
     public static final String SQL1 = "INSERT INTO random_picture (pid) VALUES ('";
     public static final String SQL2 = "');";

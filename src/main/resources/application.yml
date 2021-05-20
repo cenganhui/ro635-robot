@@ -18,8 +18,12 @@ mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.cgh.ro635bot.entity
 
-# API KEY
+# 高德 API KEY
 weather:
+  key:
+
+# 天行数据 API KEY
+tian:
   key:
 
 # 日志

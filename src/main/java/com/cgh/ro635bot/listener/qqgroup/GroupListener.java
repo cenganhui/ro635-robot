@@ -3,6 +3,7 @@ package com.cgh.ro635bot.listener.qqgroup;
 import com.cgh.ro635bot.Constants;
 import com.cgh.ro635bot.dao.*;
 import com.cgh.ro635bot.entity.*;
+import com.cgh.ro635bot.utils.ChatUtil;
 import com.cgh.ro635bot.utils.WeatherUtil;
 import love.forte.simbot.annotation.Filter;
 import love.forte.simbot.annotation.OnGroup;
@@ -18,6 +19,7 @@ import love.forte.simbot.api.message.events.GroupMsg;
 import love.forte.simbot.api.sender.MsgSender;
 import love.forte.simbot.constant.PriorityConstant;
 import love.forte.simbot.filter.MatchType;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,9 @@ public class GroupListener {
 
     @Autowired
     private WeatherUtil weatherUtil;
+
+    @Autowired
+    private ChatUtil chatUtil;
 
     /**
      * 日志
@@ -268,7 +273,7 @@ public class GroupListener {
     @Priority(PriorityConstant.FIRST)
     @OnGroup
     @Filter(atBot = true, value = "wea", matchType = MatchType.STARTS_WITH, trim = true)
-    public void sendWeatherInfo(GroupMsg groupMsg, MsgSender msgSender) {
+    public void getWeatherInfo(GroupMsg groupMsg, MsgSender msgSender) {
         String query = getQuery(Objects.requireNonNull(groupMsg.getText()));
         WeatherCity weatherCity = weatherCityDao.findWeatherCityByName(query);
         if (weatherCity != null) {
@@ -304,6 +309,28 @@ public class GroupListener {
     }
 
     /**
+     * 聊天
+     *
+     * @param groupMsg
+     * @param msgSender
+     */
+    @Priority(PriorityConstant.SECOND)
+    @OnGroup
+    @Filter(atBot = true, trim = true)
+    public void chatWithRO635(GroupMsg groupMsg, MsgSender msgSender) {
+        String text = Objects.requireNonNull(groupMsg.getText()).trim();
+        // 判断是否为指令，不是指令则执行
+        if (!checkKeyword(text)) {
+            String reply = chatUtil.getReply(text);
+            String replyString = chatUtil.getReplyString(reply);
+            MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+            MessageContent msg = builder.text(replyString).build();
+            msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+            LOG.info("聊天天success，时间：{}", DATE_FORMAT.format(new Date()));
+        }
+    }
+
+    /**
      * 欢迎新成员
      *
      * @param groupMemberIncrease
@@ -321,38 +348,6 @@ public class GroupListener {
         MessageContent msg = builder.at(accountCode).text(Constants.WELCOME_NEW_MEMBER).build();
         msgSender.SENDER.sendGroupMsg(groupCode, msg);
         LOG.info("欢迎新成员success，时间：{}", DATE_FORMAT.format(new Date()));
-    }
-
-    /**
-     * 早上好
-     *
-     * @param groupMsg
-     * @param msgSender
-     */
-    @Priority(PriorityConstant.FIRST)
-    @OnGroup
-    @Filter(atBot = true, value = "早", matchType = MatchType.EQUALS, trim = true)
-    public void goodMorning(GroupMsg groupMsg, MsgSender msgSender) {
-        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
-        MessageContent msg = builder.text(Constants.GOOD_MORNING).build();
-        msgSender.SENDER.sendGroupMsg(groupMsg, msg);
-        LOG.info("早上好success，时间：{}", DATE_FORMAT.format(new Date()));
-    }
-
-    /**
-     * 告白
-     *
-     * @param groupMsg
-     * @param msgSender
-     */
-    @Priority(PriorityConstant.FIRST)
-    @OnGroup
-    @Filter(atBot = true, value = "喜欢你", matchType = MatchType.EQUALS, trim = true)
-    public void expressRO635(GroupMsg groupMsg, MsgSender msgSender) {
-        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
-        MessageContent msg = builder.text(Constants.EXPRESSION).build();
-        msgSender.SENDER.sendGroupMsg(groupMsg, msg);
-        LOG.info("告白success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -380,6 +375,23 @@ public class GroupListener {
     private String getQuery(String original) {
         String[] str = original.split(" ");
         return str[str.length - 1];
+    }
+
+    /**
+     * 检查文本开头是否含有关键字（即是否为指令）
+     *
+     * @param text 文本
+     * @return 有则返回true，否则返回false
+     */
+    private boolean checkKeyword(String text) {
+        String[] keywords = Constants.KEYWORDS.split(" ");
+        for (String keyword : keywords) {
+            int index = StringUtils.indexOfAny(text, keyword);
+            if (index == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

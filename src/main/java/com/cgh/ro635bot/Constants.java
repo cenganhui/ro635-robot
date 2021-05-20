@@ -16,10 +16,6 @@ public abstract class Constants {
     public static final String CAL_RANDOM_WORDS4 = "%，好像还不错？";
     public static final String CAL_RANDOM_WORDS5 = "%，很高啊。";
 
-    public static final String EXPRESSION = "为什么会选择我，您一定有自己的理由，而我的信念也终于得到了您的认可，不过......能不能别靠得这么近，大家......大家都在看着呢......好害羞。";
-
-    public static final String GOOD_MORNING = "早上好，指挥官。";
-
     public static final String QUERY_PRODUCE = "了解，正在为您查询......\n\n";
     public static final String QUERY_PRODUCE_FAIL = "抱歉指挥官，我没能找到。";
 
@@ -32,8 +28,6 @@ public abstract class Constants {
     public static final String WELCOME_NEW_MEMBER = "指挥官，欢迎您。初次见面，我是RO635，等待您的差遣。";
 
     public static final String HELP_TEXT = "# 基础指令\n\n" +
-            "# 早上好\n" +
-            "@RO 早\n" +
             "# 日常互动\n" +
             "@RO ro\n" +
             "# 计算概率\n" +
@@ -50,9 +44,19 @@ public abstract class Constants {
             "@RO wea 城市名称";
 
     /**
+     * 关键指令
+     */
+    public static final String KEYWORDS = "ro rd mute qfi qeq qfa pic";
+
+    /**
      * 高德地图天气预报请求url
      */
     public static final String WEATHER_SERVICE_URL = "https://restapi.amap.com/v3/weather/weatherInfo?city=";
+
+    /**
+     * 天行数据请求url
+     */
+    public static final String TIAN_SERVICE_URL = "http://api.tianapi.com/txapi/robot/index?";
 
     public static final String CAT_TYPE_IMAGE = "image";
     public static final String NEKO_IMAGE_URL = "url";

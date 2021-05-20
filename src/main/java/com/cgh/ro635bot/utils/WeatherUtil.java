@@ -29,7 +29,7 @@ import java.util.List;
 public class WeatherUtil {
 
     /**
-     * API key
+     * API KEY
      */
     private String key;
 

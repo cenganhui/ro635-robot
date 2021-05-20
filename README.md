@@ -8,8 +8,10 @@
 - 天气预报
 - 欢迎新成员
 - 私聊群发更新信息
+- 聊天
 
 ## 资料
 - simple-robot：https://github.com/ForteScarlet/simpler-robot
 - simple-robot文档：https://www.yuque.com/simpler-robot/simpler-robot-doc
 - 高德开放平台：https://lbs.amap.com/api/webservice/guide/api/weatherinfo
+- 天行机器人：https://www.tianapi.com/apiview/47#apiprice
