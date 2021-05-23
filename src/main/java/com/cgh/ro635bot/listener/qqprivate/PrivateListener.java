@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 私聊监听
@@ -51,7 +52,7 @@ public class PrivateListener {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Constants.DATE_FORMAT);
 
     /**
-     * 群发更新信息
+     * 群发更新信息，格式为update [更新图片]
      *
      * @param privateMsg
      * @param msgSender
@@ -75,12 +76,47 @@ public class PrivateListener {
 //                    System.out.println(groupInfo.getGroupCode());
                     msgSender.SENDER.sendGroupMsg(groupInfo.getGroupCode(), msg);
                 }
+                msgSender.SENDER.sendPrivateMsg(privateMsg, Constants.GROUP_SEND_SUCCESS);
                 LOG.info("群发更新信息success，时间：{}", DATE_FORMAT.format(new Date()));
             }
         } catch (Exception e) {
-            MessageContent msg = builder.text(Constants.GROUP_SEND_FAILURE).build();
-            msgSender.SENDER.sendPrivateMsg(privateMsg, msg);
+            msgSender.SENDER.sendPrivateMsg(privateMsg, Constants.GROUP_SEND_FAILURE);
             LOG.info("群发更新信息failure，时间：{}", DATE_FORMAT.format(new Date()));
+        }
+    }
+
+    /**
+     * 群发图片，格式为pic [desc] [图片]
+     *
+     * @param privateMsg
+     * @param msgSender
+     */
+    @OnPrivate
+    @Filter(value = "pic", matchType = MatchType.STARTS_WITH, trim = true)
+    public void groupSendPicture(PrivateMsg privateMsg, MsgSender msgSender) {
+        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+        String[] text = Objects.requireNonNull(privateMsg.getText()).split(" ");
+        String description = text[text.length - 1];
+        try {
+            // 获取消息中的图片url
+            MessageContent msgContent = privateMsg.getMsgContent();
+            String imageUrl = msgContent.getCats(Constants.CAT_TYPE_IMAGE).get(0).get(Constants.NEKO_IMAGE_URL);
+            if (!StringUtils.isNullOrEmpty(imageUrl)) {
+                // 获取QQ群列表
+                GroupList groupList = msgSender.GETTER.getGroupList();
+                // 构建消息内容
+                MessageContent msg = builder.text(description).imageUrl(imageUrl).build();
+                // 遍历群发
+                for (SimpleGroupInfo groupInfo : groupList) {
+//                    System.out.println(groupInfo.getGroupCode());
+                    msgSender.SENDER.sendGroupMsg(groupInfo.getGroupCode(), msg);
+                }
+                msgSender.SENDER.sendPrivateMsg(privateMsg, Constants.GROUP_SEND_SUCCESS);
+                LOG.info("群发图片success，时间：{}", DATE_FORMAT.format(new Date()));
+            }
+        } catch (Exception e) {
+            msgSender.SENDER.sendPrivateMsg(privateMsg, Constants.GROUP_SEND_FAILURE);
+            LOG.info("群发图片failure，时间：{}", DATE_FORMAT.format(new Date()));
         }
     }
 
