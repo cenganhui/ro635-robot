@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cgh.ro635bot.dao.PlateDao">
+
+    <resultMap id="plateMap" type="com.cgh.ro635bot.entity.Plate">
+        <id column="pid" property="id"/>
+        <result column="p_title" property="title"/>
+
+        <collection property="strategies" ofType="com.cgh.ro635bot.entity.Strategy">
+            <id column="sid" property="id"/>
+            <result column="s_title" property="title"/>
+            <result column="s_url" property="url"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAllPlate" resultMap="plateMap">
+        select plate.id pid, plate.title p_title, strategy.id sid, strategy.title s_title, strategy.url s_url
+        from plate, strategy
+        where plate.id = strategy.plate_id
+    </select>
+
+    <select id="findPlateByTitle" resultMap="plateMap">
+        select plate.id pid, plate.title p_title, strategy.id sid, strategy.title s_title, strategy.url s_url
+        from plate, strategy
+        where plate.id = strategy.plate_id AND plate.title = #{title}
+    </select>
+</mapper>

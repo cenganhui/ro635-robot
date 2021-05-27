@@ -11,7 +11,7 @@
 - 聊天
 - 私聊群发图片
 
-## 部分指令
+## 部分命令
 ```bash
 # 日常互动
 @RO ro
@@ -57,6 +57,12 @@ update [图片]
 
 # 私聊群发图片
 pic [描述] [图片]
+
+# 少女前线相关攻略板块
+@RO 相关攻略
+
+# 攻略
+@RO 攻略 板块名称
 ```
 
 ## 资料
@@ -64,3 +70,4 @@ pic [描述] [图片]
 - simple-robot文档：https://www.yuque.com/simpler-robot/simpler-robot-doc
 - 高德开放平台：https://lbs.amap.com/api/webservice/guide/api/weatherinfo
 - 天行机器人：https://www.tianapi.com/apiview/47#apiprice
+- 少女前线nga：https://bbs.nga.cn/thread.php?fid=-547859

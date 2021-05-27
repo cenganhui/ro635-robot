@@ -69,6 +69,12 @@ public class GroupListener {
     private WeatherCityDao weatherCityDao;
 
     @Autowired
+    private CommandDao commandDao;
+
+    @Autowired
+    private PlateDao plateDao;
+
+    @Autowired
     private WeatherUtil weatherUtil;
 
     @Autowired
@@ -309,6 +315,63 @@ public class GroupListener {
     }
 
     /**
+     * 获取所有攻略板块
+     *
+     * @param groupMsg
+     * @param msgSender
+     */
+    @Priority(PriorityConstant.FIRST)
+    @OnGroup
+    @Filter(atBot = true, value = "相关攻略", matchType = MatchType.EQUALS, trim = true)
+    public void getAllPlates(GroupMsg groupMsg, MsgSender msgSender) {
+        List<Plate> plateList = plateDao.findAllPlate();
+        StringBuilder text = new StringBuilder();
+        text.append(Constants.PLATE_TITLE);
+        for (Plate plate : plateList) {
+            text.append(plate.getTitle()).append("\n");
+        }
+        // 去除最后一个换行
+        text.delete(text.length() - 1, text.length());
+        MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+        MessageContent msg = builder.text(text.toString()).build();
+        msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        LOG.info("获取所有板块success，时间：{}", DATE_FORMAT.format(new Date()));
+    }
+
+    /**
+     * 获取相关攻略
+     *
+     * @param groupMsg
+     * @param msgSender
+     */
+    @Priority(PriorityConstant.FIRST)
+    @OnGroup
+    @Filter(atBot = true, value = "攻略", matchType = MatchType.STARTS_WITH, trim = true)
+    public void getPlateByTitle(GroupMsg groupMsg, MsgSender msgSender) {
+        String query = getQuery(Objects.requireNonNull(groupMsg.getText()));
+        Plate plate = plateDao.findPlateByTitle(query);
+        if (plate != null) {
+            // 查询到攻略
+            List<Strategy> strategyList = plate.getStrategies();
+            StringBuilder text = new StringBuilder();
+            text.append(Constants.STRATEGY_TITLE);
+            for (Strategy strategy : strategyList) {
+                text.append(strategy.getTitle()).append("：").append(strategy.getUrl()).append("\n");
+            }
+            // 去除最后一个换行
+            text.delete(text.length() - 1, text.length());
+            MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+            MessageContent msg = builder.text(text.toString()).build();
+            msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        } else {
+            MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
+            MessageContent msg = builder.text(Constants.COMMAND_WRONG).build();
+            msgSender.SENDER.sendGroupMsg(groupMsg, msg);
+        }
+        LOG.info("获取板块攻略success，时间：{}", DATE_FORMAT.format(new Date()));
+    }
+
+    /**
      * 聊天
      *
      * @param groupMsg
@@ -351,7 +414,7 @@ public class GroupListener {
     }
 
     /**
-     * 获取帮助信息（基础指令）
+     * 获取帮助信息（基础命令）
      *
      * @param groupMsg
      * @param msgSender
@@ -363,7 +426,7 @@ public class GroupListener {
         MessageContentBuilder builder = messageContentBuilderFactory.getMessageContentBuilder();
         MessageContent msg = builder.text(Constants.HELP_TEXT).build();
         msgSender.SENDER.sendGroupMsg(groupMsg, msg);
-        LOG.info("获取帮助信息（基础指令）success，时间：{}", DATE_FORMAT.format(new Date()));
+        LOG.info("获取帮助信息（基础命令）success，时间：{}", DATE_FORMAT.format(new Date()));
     }
 
     /**
@@ -384,9 +447,9 @@ public class GroupListener {
      * @return 有则返回true，否则返回false
      */
     private boolean checkKeyword(String text) {
-        String[] keywords = Constants.KEYWORDS.split(" ");
-        for (String keyword : keywords) {
-            int index = StringUtils.indexOfAny(text, keyword);
+        List<Command> commandList = commandDao.findAllCommand();
+        for (Command command : commandList) {
+            int index = StringUtils.indexOfAny(text, command.getName());
             if (index == 0) {
                 return true;
             }

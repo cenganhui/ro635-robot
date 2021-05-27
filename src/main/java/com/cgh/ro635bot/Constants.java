@@ -25,9 +25,10 @@ public abstract class Constants {
 
     public static final String WEATHER_CITY_NAME_QUERY_FAIL = "抱歉指挥官，城市名称可能有些问题。";
 
-    public static final String WELCOME_NEW_MEMBER = "指挥官，欢迎您。初次见面，我是RO635，等待您的差遣。";
+    public static final String WELCOME_NEW_MEMBER = "指挥官，欢迎您。初次见面，我是RO635，等待您的差遣。\n" +
+            "您可以通过@RO635 help来查看相关命令的使用。";
 
-    public static final String HELP_TEXT = "# 基础指令\n\n" +
+    public static final String HELP_TEXT = "# 命令\n\n" +
             "# 日常互动\n" +
             "@RO ro\n" +
             "# 计算概率\n" +
@@ -41,12 +42,16 @@ public abstract class Constants {
             "# 图图\n" +
             "@RO pic\n" +
             "# 天气预报\n" +
-            "@RO wea 城市名称";
+            "@RO wea 城市名称\n" +
+            "# 少女前线相关攻略板块\n" +
+            "@RO 相关攻略\n" +
+            "# 攻略\n" +
+            "@RO 攻略 板块名称";
 
-    /**
-     * 关键指令
-     */
-    public static final String KEYWORDS = "ro rd mute qfi qeq qfa pic";
+    public static final String PLATE_TITLE = "攻略板块名称：\n";
+    public static final String STRATEGY_TITLE = "相关攻略：\n";
+
+    public static final String COMMAND_WRONG = "抱歉指挥官，我听不太懂。";
 
     /**
      * 高德地图天气预报请求url
